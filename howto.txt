@@ -1,0 +1,105 @@
+
+
+->Copy folders (paga & paga_mc) inside /plugins/vmpayment/ Folder To your /plugins/vmpayment/ Folder
+
+->Copy file inside /administrator/language/en-GB/ Folder To your /administrator/language/en-GB/ Folder
+
+->Copy images inside /images/stories/virtuemart/payment Folder To your /images/stories/virtuemart/payment Folder
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+     * For paga payment method
+     *
+     */
+    function pluginFindStatus()
+	{
+		if($_POST['status'] == 'SUCCESS'){
+			
+			JPluginHelper::importPlugin('vmpayment');
+
+	        $dispatcher = JDispatcher::getInstance();
+	        $returnValues = $dispatcher->trigger('plgVmOnPaymentNotification', array());
+			
+			$this->pluginResponseReceived();
+		}
+		else{
+			$this->pluginUserPaymentCancel();
+		}
+	}
+
+
+->Open pluginresponse.php file from  /components/com_virtuemart/controllers/  and paste above function after :
+
+   public function __construct() {
+	parent::__construct();
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+->Quries to run in Database 
+
+INSERT INTO `YOUR_DB_PREFIX_extensions` (
+`extension_id` ,
+`name` ,
+`type` ,
+`element` ,
+`folder` ,
+`client_id` ,
+`enabled` ,
+`access` ,
+`protected` ,
+`manifest_cache` ,
+`params` ,
+`custom_data` ,
+`system_data` ,
+`checked_out` ,
+`checked_out_time` ,
+`ordering` ,
+`state`
+)
+VALUES (
+'9999', 'Paga', 'plugin', 'paga', 'vmpayment', '0', '1', '1', '0', '{"legacy":true,"name":"VMPAYMENT_PAGA","type":"plugin","creationDate":"April 30 2013","author":"The Development Team","copyright":"Copyright (C) 2004-2012 Team. All rights reserved.","authorEmail":"","authorUrl":"http:\\/\\/www.virtuemart.net","version":"2.0.20b","description":"<a href=\\"http:\\/\\/mypaga.com\\" target=\\"_blank\\">Paga<\\/a> is a popular\\n\\tpayment provider and available in many countries. \\n ","group":""}', '', '', '', '0', '0000-00-00 00:00:00', '0', '0'
+);
+
+
+
+INSERT INTO `YOUR_DB_PREFIX_extensions` (
+`extension_id` ,
+`name` ,
+`type` ,
+`element` ,
+`folder` ,
+`client_id` ,
+`enabled` ,
+`access` ,
+`protected` ,
+`manifest_cache` ,
+`params` ,
+`custom_data` ,
+`system_data` ,
+`checked_out` ,
+`checked_out_time` ,
+`ordering` ,
+`state`
+)
+VALUES (
+'9998', 'Paga Mastercard', 'plugin', 'paga_mc', 'vmpayment', '0', '1', '1', '0', '{"legacy":true,"name":"VMPAYMENT_PAGA_MC","type":"plugin","creationDate":"April 30 2013","author":"The Development Team","copyright":"Copyright (C) 2004-2012 Team. All rights reserved.","authorEmail":"","authorUrl":"http:\\/\\/www.virtuemart.net","version":"2.0.20b","description":"<a href=\\"http:\\/\\/mypaga.com\\" target=\\"_blank\\">Paga<\\/a> is a popular\\n\\tpayment provider and available in many countries. \\n ","group":""}', '', '', '', '0', '0000-00-00 00:00:00', '0', '0'
+);
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Install module after logging in to admin area
+
+ Go To link Components -> VirtueMart then Click on Payment Methods .
+
+ Click on "New" . Select Paga or PagaMastercard from the Payment Method dropdown .
+
+ Enter merchant key and other settings by clicking on Configuration Tab .
+
+
